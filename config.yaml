@@ -1,0 +1,44 @@
+modbus:
+  host: "0.0.0.0"
+  port: 5020
+  unit_id: 1
+
+emulation:
+  interval_seconds: 2
+  wind_nodes:
+    count: 3
+    rated_capacity_kw: 2000
+    registers:
+      wind_speed: 0
+      rotor_rpm: 1
+      power_output: 2
+      nacelle_temp: 3
+      grid_voltage: 4
+  solar_nodes:
+    count: 3
+    rated_capacity_kw: 1500
+    registers:
+      irradiance: 10
+      cell_temp: 11
+      power_output: 12
+      dc_voltage: 13
+      string_current: 14
+
+database:
+  path: "output/scada.db"
+  wal_mode: true
+  batch_flush_interval: 5
+
+analytics:
+  scrubbing:
+    zscore_threshold: 3.0
+    interpolation_max_gap: 5
+  kpi:
+    window_minutes: 60
+  anomaly:
+    rolling_window: 20
+    power_ratio_threshold: 0.6
+
+reports:
+  output_dir: "output/reports"
+  schedule: "daily"
