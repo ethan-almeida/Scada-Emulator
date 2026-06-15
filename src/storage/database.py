@@ -1,4 +1,5 @@
 import sqlite3
+import threading
 from pathlib import Path
 
 class Database:
@@ -6,6 +7,7 @@ class Database:
         self.db_path = db_path
         self.wal_mode = wal_mode
         self._conn: sqlite3.Connection | None = None
+        self._local = threading.local()
 
     def connect(self) -> sqlite3.Connection:
         Path(self.db_path).parent.mkdir(parents=True, exist_ok=True)
@@ -26,6 +28,14 @@ class Database:
             self.connect()
         return self._conn
 
+    def get_thread_conn(self) -> sqlite3.Connection:
+        if not hasattr(self._local, "conn") or self._local.conn is None:
+            self._local.conn = sqlite3.connect(self.db_path)
+            if self.wal_mode:
+                self._local.conn.execute("PRAGMA journal_mode=WAL;")
+            self._local.conn.execute("PRAGMA synchronous=NORMAL;")
+        return self._local.conn
+        
     def close(self):
         if self._conn:
             self._conn.close()
