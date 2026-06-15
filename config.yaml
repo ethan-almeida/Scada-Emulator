@@ -6,7 +6,7 @@ modbus:
 emulation:
   interval_seconds: 2
   wind_nodes:
-    count: 3
+    count: 5
     rated_capacity_kw: 2000
     registers:
       wind_speed: 0
@@ -15,7 +15,7 @@ emulation:
       nacelle_temp: 3
       grid_voltage: 4
   solar_nodes:
-    count: 3
+    count: 5
     rated_capacity_kw: 1500
     registers:
       irradiance: 10
